@@ -9,16 +9,14 @@ using TMPro;
 
 [RequireComponent(typeof(UnityStandardAssets.Characters.FirstPerson.FirstPersonController))]
 
-public class Player : MonoBehaviour
+public class Player : Creatures, IRaycastable
 {
     public TextMeshProUGUI killsText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI damageText;
 
     [Space]
-    public float health;
     public int killsCounter;
-    public float damage = 50;
 
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPerson;
 
@@ -40,19 +38,6 @@ public class Player : MonoBehaviour
         UpdateSomeUiText(damageText, damage);
     }
 
-    //get damage from enemy
-    public void GetDamage(float _dmg)
-    {
-        health -= _dmg;
-        UpdateSomeUiText(healthText, health);
-    }
-
-    //send damage to enemy
-    public void SendDamage(Enemy _enemy)
-    {
-        _enemy.GetDamage(damage);
-    }
-
     //called when some enemy dies
     public void UpdateKillsCount()
     {
@@ -64,6 +49,25 @@ public class Player : MonoBehaviour
     private void UpdateSomeUiText(TextMeshProUGUI _textField, float _val)
     {
         _textField.text = _val.ToString();
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) SendRaycast(); //detect each LMB click
+    }
+
+    public void SendRaycast()
+    {
+        Transform _target = ShootingLogic.CalculateRaycast();
+        if (_target != null && _target.GetComponent<Enemy>() != null)
+        {
+            SendDamage(_target.GetComponent<Enemy>(), damage);
+        }
+    }
+
+    public override void KillCreature()
+    {
+        Debug.LogError("GAME OVER!");
     }
 
     #region DamageBoost

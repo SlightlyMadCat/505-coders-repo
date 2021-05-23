@@ -6,25 +6,38 @@ using UnityEngine;
  * AI realisation of Enemy logic for Archer prefab
  */
 
-public class ArcherEnemy : Enemy, IShootable, IClickable
+public class ArcherEnemy : Enemy, IRaycastable
 {
-    public override void InitData(Player _player, Transform _place)
+    void Update()
     {
-        speed = 1;
-        health = 50;
-        damage = 70;
-        damageDelay = 7f;
-        targetPlayer = _player;
-        usedSpawnPlace = _place;
-    }
-
-    public void OnMouseDown()
-    {
-        targetPlayer.SendDamage(this);
+        //from here try to send raycasts
+        SendRaycast();
     }
 
     public void SendRaycast()
     {
-        //TODO
+        if (isReloading)
+            return;
+
+        Transform _target = ShootingLogic.CalculateLineCast(transform, Player.Instance.transform);
+        if (_target != null && _target.GetComponent<Player>() != null)
+        {
+            SendDamage(_target.GetComponent<Player>(), damage);
+            StartCoroutine(ShootDelay());
+        }
+    }
+
+    public bool isReloading = false;
+
+    IEnumerator ShootDelay()
+    {
+        isReloading = true;
+        yield return new WaitForSeconds(damageDelay);
+        isReloading = false;
+    }
+
+    public override void KillCreature()
+    {
+        Die();
     }
 }

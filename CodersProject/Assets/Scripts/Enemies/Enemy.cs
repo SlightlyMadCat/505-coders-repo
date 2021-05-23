@@ -7,16 +7,17 @@ using UnityEngine.AI;
  * Abstract class with main Enemy props and abilities
  */
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : Creatures
 {
     public Player targetPlayer { get; set; }
-    public float speed { get; set; }
-    public float health { get; set; }
-    public float damage { get; set; }
-    public float damageDelay { get; set; }
+    public float damageDelay;
     public Transform usedSpawnPlace { get; set; }  //remember spawn place that should be re-used after ai death
 
-    public abstract void InitData(Player _player, Transform _place);    //called on init
+    public void InitData(Player _player, Transform _place)  //called on init
+    {
+        targetPlayer = _player;
+        usedSpawnPlace = _place;
+    }    
 
     private NavMeshAgent navMeshAgent;
     private Coroutine damagingCor { get; set; }
@@ -28,10 +29,14 @@ public abstract class Enemy : MonoBehaviour
         navMeshAgent.speed = _speed;
     }
 
-    //sends dmg from enemy to player
-    protected void SendDamage(Player _player, float _damage)
+    protected void Die()
     {
-        _player.GetDamage(_damage);
+        Player.Instance.UpdateKillsCount();
+        EnemySpawner.Instance.RestoreSpawnPlace(usedSpawnPlace);
+        EnemySpawner.Instance.SpawnNewEnemy();
+        ItemsSpawner.Instance.SpawnNewItem(transform.position + Vector3.up * 3f);
+
+        Destroy(gameObject);
     }
 
     //void stops shooting cor for ai
@@ -53,24 +58,6 @@ public abstract class Enemy : MonoBehaviour
         damagingCor = StartCoroutine(DamagingCor(_player, _damage));
     }
 
-    //called to destroy ai
-    private void Die()
-    {
-        Player.Instance.UpdateKillsCount();
-        EnemySpawner.Instance.RestoreSpawnPlace(usedSpawnPlace);
-        EnemySpawner.Instance.SpawnNewEnemy();
-        ItemsSpawner.Instance.SpawnNewItem(transform.position + Vector3.up*3f);
-
-        Destroy(gameObject);
-    }
-
-    //called when player clicks over ai
-    public void GetDamage(float _dmg)
-    {
-        health -= _dmg;
-        if (health <= 0)
-            Die();
-    }
 
     private void Awake()
     {
@@ -100,12 +87,39 @@ public interface ICollidable
  * Voids for enemies that can shoot 
  */
 
-public interface IShootable
+public interface IRaycastable
 {
     public void SendRaycast();
 }
 
-public interface IClickable
+/**
+ *  Static physics class 
+ */
+
+public static class ShootingLogic
 {
-    public void OnMouseDown();
+    //Raycasting logic
+    public static Transform CalculateRaycast()
+    {
+        RaycastHit _hit;
+        Ray _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(_ray, out _hit))
+        {
+            return _hit.transform;
+        }
+        else
+            return null;
+    }
+
+    //Linecasting logic
+    public static Transform CalculateLineCast(Transform _startPoint, Transform _endPoint)
+    {
+        if (Physics.Linecast(_startPoint.position, _endPoint.position, out RaycastHit _info))
+        {
+            return _info.transform;
+        }
+        else
+            return null;
+    }
 }
