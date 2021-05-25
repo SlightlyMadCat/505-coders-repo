@@ -998,12 +998,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80035547687c8f240a6aa4d1712d2648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 1000
+  speed: 0
+  damage: 50
   killsText: {fileID: 1038114493}
   healthText: {fileID: 730104694}
   damageText: {fileID: 1643294826}
-  health: 1000
   killsCounter: 0
-  damage: 50
 --- !u!136 &1351006105
 CapsuleCollider:
   m_ObjectHideFlags: 0

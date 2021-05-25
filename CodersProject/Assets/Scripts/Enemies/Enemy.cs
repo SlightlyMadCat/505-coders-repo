@@ -58,7 +58,6 @@ public abstract class Enemy : Creatures
         damagingCor = StartCoroutine(DamagingCor(_player, _damage));
     }
 
-
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();    //assign navmesh
