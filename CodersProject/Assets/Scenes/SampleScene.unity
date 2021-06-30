@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1351006099}
-  startAiCount: 3
+  startAiCount: 1
   enemiesToSpawn:
   - {fileID: 3980792082075046861, guid: f89cd709cbe308f4591062ee1ffc2094, type: 3}
   - {fileID: 8272065785857305793, guid: aff5e9d3a58e852459604d1fc92c64a6, type: 3}

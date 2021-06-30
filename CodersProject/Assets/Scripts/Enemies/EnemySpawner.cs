@@ -17,6 +17,7 @@ public class EnemySpawner : MonoBehaviour
 
     public List<Transform> spawnPlaces = new List<Transform>();
     private List<Transform> usedSpawnPlaces = new List<Transform>();
+    private List<Enemy> spawnedEnemies = new List<Enemy>();
 
     #region Singleton
     public static EnemySpawner Instance; 
@@ -32,7 +33,12 @@ public class EnemySpawner : MonoBehaviour
         StartSpawn();
     }
 
-    private void StartSpawn()
+    public void SetStartAiToSpawnVal(int _val)
+    {
+        startAiCount = _val;
+    }
+
+    public void StartSpawn()
     {
         for (int _i = 0; _i < startAiCount; _i++)
         {
@@ -57,6 +63,7 @@ public class EnemySpawner : MonoBehaviour
 
         Enemy _enemy = _ai.GetComponent<Enemy>();
         _enemy.InitData(player, _spawnPlace);
+        spawnedEnemies.Add(_enemy);
     }
 
     //called when some is is dying and place become free
@@ -64,5 +71,12 @@ public class EnemySpawner : MonoBehaviour
     {
         spawnPlaces.Add(_place);
         usedSpawnPlaces.Remove(_place);
+        spawnedEnemies.RemoveAt(0);
+    }
+
+    //called from custom editor
+    public void DestroyAllSpawnedEnemies()
+    {
+        spawnedEnemies[0].GetDamage(999);        
     }
 }
