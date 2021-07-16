@@ -49,6 +49,7 @@ public class Player : Creatures, IRaycastable
 
     public void KillerFeatureVoid()
     {
+        //transform tor selected
         transform.rotation = transform.rotation;
     }
     
