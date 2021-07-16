@@ -47,12 +47,11 @@ public class Player : Creatures, IRaycastable
         gameObject.SetActive(true);
     }
 
-    private void SomeCoolFeature()
+    public void KillerFeatureVoid()
     {
-        transform.position = transform.position;
-        transform.rotation = transform.rotation;
+        //
     }
-
+    
     //called when some enemy dies
     public void UpdateKillsCount()
     {
