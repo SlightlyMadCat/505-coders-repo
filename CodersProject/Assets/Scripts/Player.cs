@@ -50,6 +50,7 @@ public class Player : Creatures, IRaycastable
     private void SomeCoolFeature()
     {
         transform.position = transform.position;
+        transform.rotation = transform.rotation;
     }
 
     //called when some enemy dies
