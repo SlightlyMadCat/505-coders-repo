@@ -44,6 +44,7 @@ public class Player : Creatures, IRaycastable
     private void UpdateHealthBar(float _newHealth)
     {
         UpdateSomeUiText(healthText, _newHealth);   //some another text
+        gameObject.SetActive(true);
     }
 
     //called when some enemy dies
