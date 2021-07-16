@@ -50,6 +50,7 @@ public class Player : Creatures, IRaycastable
     private void SomeCoolFeature()
     {
         transform.position = transform.position;
+        transform.rotation = Quaternion.identity;
     }
 
     //called when some enemy dies
