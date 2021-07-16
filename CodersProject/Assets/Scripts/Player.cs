@@ -49,7 +49,7 @@ public class Player : Creatures, IRaycastable
 
     public void KillerFeatureVoid()
     {
-        //
+        transform.position = transform.position;
     }
     
     //called when some enemy dies
