@@ -43,7 +43,7 @@ public class Player : Creatures, IRaycastable
     //called for player to update ui health bar on damage recieving
     private void UpdateHealthBar(float _newHealth)
     {
-        UpdateSomeUiText(healthText, _newHealth);
+        UpdateSomeUiText(healthText, _newHealth);   //added some text
     }
 
     //called when some enemy dies
